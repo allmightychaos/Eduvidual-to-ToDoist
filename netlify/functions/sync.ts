@@ -15,7 +15,7 @@ export const handler = schedule("0 * * * *", async (event) => {
         
         const todoist = new TodoistApi(todoistToken);
         const events = await ical.async.fromURL(icalUrl);
-        const eventList = Object.values(events).filter(e => e.type === 'VEVENT');
+        const eventList = Object.values(events).filter(e => e && e.type === 'VEVENT');
         
         const tasksResponse = await todoist.getTasks();
         const activeTaskNames = new Set(tasksResponse.results.map((t: any) => t.content));
