@@ -290,7 +290,7 @@
 
             let pwdToUse = getCookie('authPwd');
             try {
-                const response = await fetch(`/.netlify/functions/force?pwd=${encodeURIComponent(pwdToUse)}`, { method: 'POST' });
+                const response = await fetch(`/do-sync?pwd=${encodeURIComponent(pwdToUse)}`, { method: 'POST' });
                 if (response.ok) {
                     alert("Sync triggered and completed successfully!");
                 } else {
