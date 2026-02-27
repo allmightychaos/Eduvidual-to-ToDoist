@@ -1,23 +1,35 @@
 import { getStore } from '@netlify/blobs';
 import { TodoistApi, AddTaskArgs } from '@doist/todoist-api-typescript';
 import ical, { VEvent } from 'node-ical';
+import * as https from 'https';
 
-const fetchIcalViaProxy = async (): Promise<string> => {
+const fetchIcalViaProxy = (): Promise<string> => {
     const siteUrl = process.env.URL;
     if (!siteUrl) {
-        throw new Error('URL env var not set — cannot resolve proxy endpoint');
+        return Promise.reject(new Error('URL env var not set — cannot resolve proxy endpoint'));
     }
 
     const proxyUrl = `${siteUrl}/ical-proxy`;
     console.log(`Fetching iCal via edge proxy: ${proxyUrl}`);
 
-    const res = await fetch(proxyUrl);
-    if (!res.ok) {
-        const body = await res.text().catch(() => '');
-        throw new Error(`Proxy returned ${res.status}: ${body}`);
-    }
+    return new Promise((resolve, reject) => {
+        const req = https.get(proxyUrl, { timeout: 20000 }, (res) => {
+            if (!res.statusCode || res.statusCode < 200 || res.statusCode >= 300) {
+                res.resume();
+                reject(new Error(`Proxy returned HTTP ${res.statusCode}: ${res.statusMessage}`));
+                return;
+            }
+            let data = '';
+            res.on('data', (chunk: string) => data += chunk);
+            res.on('end', () => resolve(data));
+        });
 
-    return res.text();
+        req.on('error', reject);
+        req.on('timeout', () => {
+            req.destroy();
+            reject(new Error('Proxy connection timed out (20s)'));
+        });
+    });
 };
 
 export const runSync = async (): Promise<Response> => {
