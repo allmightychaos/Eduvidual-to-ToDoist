@@ -21,3 +21,14 @@ Automate your student life! This project is a Netlify Scheduled Function that fe
 1. Log into [Todoist](https://todoist.com/) in your browser.
 2. Click your avatar in the top left and go to **Settings** > **Integrations** > **Developer**.
 3. Copy your **API token**.
+
+### 3. Deploy to Netlify
+The easiest way to get this running is by using the **Deploy to Netlify** button. This will automatically fork the repository and set up the Netlify project for you.
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/allmightychaos/eduvidual-to-todoist)
+
+During the deployment process, Netlify will ask you for two environment variables:
+- `EDUVIDUAL_ICAL_URL`: The URL you copied in Step 1.
+- `TODOIST_API_TOKEN`: The API token you copied in Step 2.
+
+Once deployed, the function will run automatically in the background!
