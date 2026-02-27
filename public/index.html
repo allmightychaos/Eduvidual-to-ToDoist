@@ -141,6 +141,11 @@
                     </button>
                 </div>
                 <pre id="detailMessage" class="log-viewer"></pre>
+                
+                <button id="forceSyncBtn" onclick="triggerForceSync()" style="margin-top: 1rem; width: 100%; background-color: #059669;">
+                    <svg class="icon" style="width:16px; height:16px;" viewBox="0 0 24 24"><path d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z"/></svg>
+                    Force Sync Now
+                </button>
             </div>
         </div>
     </div>
@@ -266,6 +271,33 @@
                 btn.innerHTML = '<svg class="icon" style="width:14px; height:14px;" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg> Copied!';
                 setTimeout(() => btn.innerHTML = originalText, 2000);
             });
+        }
+
+        async function triggerForceSync() {
+            const btn = document.getElementById('forceSyncBtn');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<svg class="icon" style="width:16px; height:16px;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg> Syncing...';
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            btn.style.cursor = 'wait';
+
+            let pwdToUse = getCookie('authPwd');
+            try {
+                const response = await fetch(`/.netlify/functions/force?pwd=${encodeURIComponent(pwdToUse)}`, { method: 'POST' });
+                if (response.ok) {
+                    alert("Sync triggered and completed successfully!");
+                    await fetchStatus(); // Refresh the data
+                } else {
+                    alert(`Sync failed with status: ${response.status}`);
+                }
+            } catch (error) {
+                alert("Network error triggering sync.");
+            }
+
+            btn.innerHTML = originalHtml;
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
         }
 
         // Initial Load
