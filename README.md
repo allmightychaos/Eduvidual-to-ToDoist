@@ -1,6 +1,11 @@
 # Eduvidual (Moodle) to Todoist Sync
 
-A serverless automation tool that fetches your Eduvidual (Moodle) calendar feed, parses your assignments, automatically shifts their deadlines backward by 24 hours (so you actually get them done on time!), and seamlessly syncs them to your Todoist workspace. 
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
+[![Netlify](https://img.shields.io/badge/Netlify-Scheduled%20Functions-00C7B7.svg)](https://netlify.com)
+[![node-ical](https://img.shields.io/badge/node--ical-0.25-green.svg)](https://github.com/jens-maus/node-ical)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
+A serverless automation tool that fetches your Eduvidual (Moodle) calendar feed, parses your assignments, automatically shifts their deadlines backward by 24 hours (so you actually get them done on time!), and seamlessly syncs them to your Todoist workspace.
 
 ## Features
 - **Zero Data Exposure**: No hardcoded API keys or personal URLs. All configuration is handled dynamically via Environment Variables and Netlify Blobs.
