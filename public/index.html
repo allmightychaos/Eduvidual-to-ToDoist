@@ -215,16 +215,27 @@
 
                     if (data.status === 'success') {
                         setStatusUI('Sync Successful', 'success');
-                        logSection.style.display = 'none';
                     } else if (data.status.includes('error')) {
                         setStatusUI('Sync Failed', 'error');
-                        logSection.style.display = 'block';
-                        detailMessage.textContent = data.message || data.status;
                     } else {
                         setStatusUI('No Data Yet', 'unknown');
-                        logSection.style.display = 'block';
-                        detailMessage.textContent = `Script has not executed yet. Awaiting top of the hour.\n\nNext planned execution: ${getNextExecutionTime()}`;
                     }
+                    
+                    logSection.style.display = 'block';
+                    
+                    const latestFetchStr = data.timestamp ? new Date(data.timestamp).toLocaleString() : 'Never';
+                    const nextFetchStr = getNextExecutionTime();
+                    
+                    let logText = `Status: ${data.status === 'success' ? 'Success' : data.status.includes('error') ? 'Error' : 'Unknown'}\n`;
+                    logText += `Latest Fetch: ${latestFetchStr}\n`;
+                    logText += `Next Planned Fetch: ${nextFetchStr}\n`;
+                    logText += `Debug Log: ${JSON.stringify(data, null, 2)}`;
+                    
+                    if (data.status.includes('error')) {
+                        logText += `\nError Log: ${data.message || data.status}`;
+                    }
+                    
+                    detailMessage.textContent = logText;
                 } else {
                     // Unauthenticated or invalid auth
                     if (isManualSubmit && pwdToUse) {
