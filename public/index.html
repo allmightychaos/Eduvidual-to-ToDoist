@@ -20,8 +20,7 @@
             padding: 2.5rem;
             border-radius: 12px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            border: 2px solid #e5e7eb;
-            transition: border-color 0.4s ease;
+            transition: box-shadow 0.5s ease;
             text-align: center;
             max-width: 400px;
             width: 100%;
@@ -172,8 +171,14 @@
             box.className = 'status-box ' + (type === 'warning' ? 'error' : type);
             box.innerHTML = svgs[type] + '<span>' + text + '</span>';
 
-            const borderColor = { success: '#86efac', error: '#fca5a5', warning: '#fca5a5', unknown: '#e5e7eb' };
-            document.querySelector('.container').style.borderColor = borderColor[type] ?? '#e5e7eb';
+            const base = '0 10px 15px -3px rgba(0, 0, 0, 0.1)';
+            const glows = {
+                success: base + ', 0 0 22px 6px rgba(134, 239, 172, 0.45)',
+                error:   base + ', 0 0 22px 6px rgba(252, 165, 165, 0.45)',
+                warning: base + ', 0 0 22px 6px rgba(252, 165, 165, 0.45)',
+                unknown: base,
+            };
+            document.querySelector('.container').style.boxShadow = glows[type] ?? base;
         }
 
         function setCookie(name, value, days) {
