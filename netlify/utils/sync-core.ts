@@ -20,12 +20,24 @@ export const runSync = async (): Promise<Response> => {
         const todoist = new TodoistApi(todoistToken);
         
         console.log("Fetching iCal feed...");
+        
+        // Log partially redacted URL for debug
+        try {
+            const parsedUrl = new URL(icalUrl);
+            console.log(`Target: ${parsedUrl.protocol}//${parsedUrl.hostname}${parsedUrl.pathname}...`);
+        } catch (e) {
+            console.error("Invalid EDUVIDUAL_ICAL_URL format.");
+            await store.setJSON("latest", { timestamp: new Date().toISOString(), status: "error: Invalid URL format in EDUVIDUAL_ICAL_URL" });
+            return new Response("Invalid URL", { status: 500 });
+        }
+
         let events;
         try {
             const response = await fetch(icalUrl, {
                 headers: {
-                    'User-Agent': 'Eduvidual-to-Todoist-Sync/1.1',
-                    'Accept': 'text/calendar'
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                    'Accept': 'text/calendar, text/plain, */*',
+                    'Accept-Language': 'en-US,en;q=0.9'
                 }
             });
             
@@ -37,7 +49,17 @@ export const runSync = async (): Promise<Response> => {
             events = await ical.async.parseICS(icalData);
         } catch (icalError: unknown) {
             console.error("Failed to fetch or parse iCal URL:", icalError);
-            const errorMessage = icalError instanceof Error ? icalError.message : String(icalError);
+            
+            let errorMessage = icalError instanceof Error ? icalError.message : String(icalError);
+            
+            // Extract detailed network error cause in Node.js 18+ (e.g., DNS issues, connection refused)
+            if (icalError && typeof icalError === 'object' && 'cause' in icalError) {
+                const cause = (icalError as any).cause;
+                if (cause) {
+                    errorMessage += ` (Cause: ${cause?.message || cause?.code || String(cause)})`;
+                }
+            }
+
             await store.setJSON("latest", { timestamp: new Date().toISOString(), status: `error: Failed to fetch iCal feed - ${errorMessage}` });
             return new Response("iCal error", { status: 500 });
         }
