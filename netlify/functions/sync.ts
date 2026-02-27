@@ -23,7 +23,19 @@ export default async (req: Request) => {
         console.log("Fetching iCal feed...");
         let events;
         try {
-            events = await ical.async.fromURL(icalUrl);
+            const response = await fetch(icalUrl, {
+                headers: {
+                    'User-Agent': 'Eduvidual-to-Todoist-Sync/1.1',
+                    'Accept': 'text/calendar'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+            }
+            
+            const icalData = await response.text();
+            events = await ical.async.parseICS(icalData);
         } catch (icalError: unknown) {
             console.error("Failed to fetch or parse iCal URL:", icalError);
             const errorMessage = icalError instanceof Error ? icalError.message : String(icalError);
