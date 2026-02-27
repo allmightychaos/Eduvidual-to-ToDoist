@@ -159,7 +159,6 @@
             box.innerHTML = svgs[type] + '<span>' + text + '</span>';
         }
 
-        // Cookie Helpers
         function setCookie(name, value, days) {
             let expires = "";
             if (days) {
@@ -178,6 +177,12 @@
                 if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
             }
             return null;
+        }
+
+        function getNextExecutionTime() {
+            const nextHour = new Date();
+            nextHour.setHours(nextHour.getHours() + 1, 0, 0, 0);
+            return nextHour.toLocaleString();
         }
 
         async function fetchStatus(isManualSubmit = false) {
@@ -218,7 +223,7 @@
                     } else {
                         setStatusUI('No Data Yet', 'unknown');
                         logSection.style.display = 'block';
-                        detailMessage.textContent = "Script has not executed yet. Awaiting top of the hour.";
+                        detailMessage.textContent = `Script has not executed yet. Awaiting top of the hour.\n\nNext planned execution: ${getNextExecutionTime()}`;
                     }
                 } else {
                     // Unauthenticated or invalid auth
