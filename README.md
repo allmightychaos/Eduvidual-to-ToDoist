@@ -5,6 +5,9 @@
 [![node-ical](https://img.shields.io/badge/node--ical-0.25-green.svg)](https://github.com/jens-maus/node-ical)
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](./LICENSE)
 
+> **Disclaimer: Password in URL**  
+> The status page authentication sends the password via a URL query parameter (`?pwd=...`). While query parameters can be recorded in server access logs, this is intentionally left this way for simplicity. Since this is for personal use, only you can see these logs, and the password only grants access to view debug logs.
+
 A serverless automation tool that fetches your Eduvidual (Moodle) calendar feed, parses your assignments, automatically shifts their deadlines backward by 24 hours (so you actually get them done on time!), and seamlessly syncs them to your Todoist workspace.
 
 ## Features
@@ -46,12 +49,3 @@ By default, the script syncs tasks to your global Todoist Inbox. If you want tas
 
 #### Secure the Status Page
 The deployment includes a public-facing HTML status dashboard. By default, exact error traces are hidden from the public. To view detailed stack traces and runtime information, set a `STATUS_PASSWORD` environment variable in Netlify. You can then authenticate at the bottom of the status page.
-
-> [!WARNING]
-> ### 🛑 SECURITY DISCLAIMER: Password in URL
-> 
-> The status page authentication currently sends the password via a URL query parameter (`?pwd=...`). 
-> 
-> While this is generally considered a security risk because query parameters can be recorded in server access logs (like Netlify's edge logs), **it is intentionally left this way for simplicity.** 
-> 
-> Since this tool is designed for personal use, the only person who can see these logs is you. Furthermore, the password only grants access to view debug logs on the status dashboard, not to modify tasks or access your Todoist account in any way.
