@@ -16,3 +16,8 @@ Automate your student life! This project is a Netlify Scheduled Function that fe
 3. Scroll to the bottom and click **Export calendar**.
 4. Select **All events** and **recent and next 60 days** (or whichever you prefer).
 5. Click **Get calendar URL** and copy the resulting link.
+
+### 2. Get your Todoist API Token
+1. Log into [Todoist](https://todoist.com/) in your browser.
+2. Click your avatar in the top left and go to **Settings** > **Integrations** > **Developer**.
+3. Copy your **API token**.
