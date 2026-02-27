@@ -36,14 +36,22 @@ export default async (req: Request, context: Context) => {
         responseData.isAuthenticated = isAuthenticated;
 
         return new Response(JSON.stringify(responseData), {
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            },
         });
     } catch (error: unknown) {
         console.error("Outer error:", error);
         const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
         return new Response(JSON.stringify({ timestamp: null, status: "error", message: errorMessage, isAuthenticated: false }), {
             status: 500,
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Cache-Control": "no-store, no-cache, must-revalidate"
+            },
         });
     }
 };
