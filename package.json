@@ -14,6 +14,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@netlify/functions": "^5.1.2"
+    "@netlify/functions": "^5.1.2",
+    "node-ical": "^0.25.4"
   }
 }
