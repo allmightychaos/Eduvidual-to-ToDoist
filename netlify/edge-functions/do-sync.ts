@@ -111,6 +111,7 @@ export default async function handler(req: Request): Promise<Response> {
         // 1. Fetch iCal
         console.log("Fetching iCal feed...");
         const icalRes = await fetch(icalUrl, {
+            signal: AbortSignal.timeout(15000),
             headers: {
                 "User-Agent": "Mozilla/5.0 (compatible; CalendarSync/1.0)",
                 "Accept": "text/calendar, text/plain, */*",
@@ -169,6 +170,7 @@ export default async function handler(req: Request): Promise<Response> {
 
             const taskRes = await fetch("https://api.todoist.com/api/v1/tasks", {
                 method: "POST",
+                signal: AbortSignal.timeout(8000),
                 headers: {
                     Authorization: `Bearer ${todoistToken}`,
                     "Content-Type": "application/json",
