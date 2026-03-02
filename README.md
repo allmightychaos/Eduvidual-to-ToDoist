@@ -6,6 +6,12 @@
 
 > **Note:** All calendar events are automatically shifted 24 hours earlier when added to Todoist. A deadline on Friday becomes a task due Thursday. Customizable shift duration is planned for a future update.
 
+---
+
+![Deadliner Preview](/docs/deadliner.png)
+
+---
+
 Tired of manually checking Eduvidual for deadlines? This tool pulls your Eduvidual calendar feed every 3 hours, grabs your upcoming assignments, shifts each deadline 24 hours earlier, and adds them to Todoist - all automatically, running on Cloudflare Workers. Set it up once and forget about it.
 
 ## Features
