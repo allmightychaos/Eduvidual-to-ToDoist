@@ -82,11 +82,21 @@ State is stored in Cloudflare KV under two keys:
 
 ---
 
-| Stat | Value |
-|---|---|
-| Total lines of code | 687 |
-| Worker bundle size | 6.97 KB (2.50 KB gzip) |
+<table width="100%">
+  <tr>
+    <th>Stat</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>Total lines of code</td>
+    <td>687</td>
+  </tr>
+  <tr>
+    <td>Worker bundle size</td>
+    <td>6.97 KB (2.50 KB gzip)</td>
+  </tr>
+</table>
 
 ---
 
-<p align="center">Made with ❤️ by Chaos <em>(with the help of Claude)</em></p>
+<p align="center">Made with ❤️ by Chaos <em>(with the help of Claude ;)</em></p>
