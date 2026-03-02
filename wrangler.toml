@@ -1,0 +1,14 @@
+name = "eduvidual-to-todoist"
+main = "src/worker.ts"
+compatibility_date = "2024-11-01"
+
+[assets]
+directory = "public"
+binding = "ASSETS"
+
+[triggers]
+crons = ["0 */3 * * *"]
+
+[[kv_namespaces]]
+binding = "SYNC_STATE"
+id = "PLACEHOLDER"
