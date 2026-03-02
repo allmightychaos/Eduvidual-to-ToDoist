@@ -13,3 +13,7 @@ crons = ["0 */3 * * *"]
 [[kv_namespaces]]
 binding = "SYNC_STATE"
 id = "cd25df842bb8423bbdc42da43a2fb1f9"
+
+[[routes]]
+pattern = "deadliner.skritt.net"
+custom_domain = true
