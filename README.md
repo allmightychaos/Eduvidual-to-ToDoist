@@ -4,14 +4,16 @@
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-F38020.svg)](https://workers.cloudflare.com/)
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](./LICENSE)
 
-Tired of manually checking Moodle for deadlines? This tool pulls your Eduvidual calendar feed every 3 hours, grabs your upcoming assignments, shifts each deadline 24 hours earlier, and adds them to Todoist — all automatically, running on Cloudflare Workers. Set it up once and forget about it.
+> **Note:** All calendar events are automatically shifted 24 hours earlier when added to Todoist. A deadline on Friday becomes a task due Thursday. Customizable shift duration is planned for a future update.
+
+Tired of manually checking Eduvidual for deadlines? This tool pulls your Eduvidual calendar feed every 3 hours, grabs your upcoming assignments, shifts each deadline 24 hours earlier, and adds them to Todoist - all automatically, running on Cloudflare Workers. Set it up once and forget about it.
 
 ## Features
 
-- **One platform only**: Runs entirely on Cloudflare. No GitHub Actions, no Netlify.
-- **No secrets in code**: API keys and passwords live in Cloudflare secrets. The repo is fully public.
-- **Auto-sync every 3 hours**: Driven by a Cloudflare cron trigger — no manual intervention needed.
-- **Force Sync button**: The status dashboard lets you trigger a sync on demand. Results appear immediately (no "check back in 1 min").
+- **One platform only**: Runs entirely on Cloudflare.
+- **No secrets in code**: API keys and passwords live in Cloudflare secrets.
+- **Auto-sync every 3 hours**: Driven by a Cloudflare cron trigger.
+- **Force Sync button**: The status dashboard lets you trigger a sync on demand.
 - **No duplicate tasks**: Each assignment is tracked by its unique iCal ID. The same task will never appear in Todoist twice.
 - **Built-in 24h buffer**: Every deadline is shifted back by exactly 24 hours.
 
@@ -28,10 +30,10 @@ Tired of manually checking Moodle for deadlines? This tool pulls your Eduvidual 
 ### 2. Get your Todoist API token
 
 1. Log into [Todoist](https://todoist.com/).
-2. Go to **Settings** → **Integrations** → **Developer**.
+2. Go to **Settings** - **Integrations** - **Developer**.
 3. Copy your **API token**.
 
-### 3. Deploy (~7 commands)
+### 3. Deploy
 
 ```bash
 git clone https://github.com/allmightychaos/Eduvidual-to-Todoist.git
@@ -45,8 +47,6 @@ npx wrangler secret put TODOIST_API_TOKEN
 
 npx wrangler deploy
 ```
-
-That's it. Your worker is live.
 
 ### 4. Optional secrets
 
@@ -70,12 +70,12 @@ npm run dev                  # starts wrangler dev server
 
 The Worker has two entry points:
 
-- **`scheduled()`** — runs every 3 hours via cron trigger, calls `runSync()`
-- **`fetch()`** — handles HTTP requests:
-  - `GET /api/status` — returns latest sync state from KV
-  - `GET /api/sync?pwd=...` — runs sync immediately (auth-gated if `STATUS_PASSWORD` is set)
-  - Everything else — served from `public/` as static assets
+- **`scheduled()`** - runs every 3 hours via cron trigger, calls `runSync()`
+- **`fetch()`** - handles HTTP requests:
+  - `GET /api/status` - returns latest sync state from KV
+  - `GET /api/sync` - runs sync immediately (auth-gated if `STATUS_PASSWORD` is set)
+  - Everything else - served from `public/` as static assets
 
 State is stored in Cloudflare KV under two keys:
-- `"latest"` — `{ timestamp, status }` of the most recent sync
-- `"processed-events"` — array of already-synced iCal UIDs (prevents duplicates)
+- `"latest"` - `{ timestamp, status }` of the most recent sync
+- `"processed-events"` - array of already-synced iCal UIDs (prevents duplicates)

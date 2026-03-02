@@ -281,7 +281,7 @@ export default {
                     const ageMs = Date.now() - new Date(stored.timestamp).getTime();
                     if (ageMs < 10 * 60 * 1000) return; // primary succeeded recently, skip retry
                 }
-            } catch { /* KV read failed — proceed with sync anyway */ }
+            } catch { /* KV read failed - proceed with sync anyway */ }
         }
         ctx.waitUntil(runSync(env).catch(console.error));
     },

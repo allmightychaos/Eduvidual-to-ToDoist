@@ -10,7 +10,7 @@ import { dirname, join } from "node:path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const tomlPath = join(__dirname, "..", "wrangler.toml");
 
-// Check first — avoid creating an orphaned namespace on re-runs
+// Check first - avoid creating an orphaned namespace on re-runs
 const toml = readFileSync(tomlPath, "utf8");
 if (!toml.includes('id = "PLACEHOLDER"')) {
     console.log("wrangler.toml already contains a real KV namespace ID. Nothing to do.");
