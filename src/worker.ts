@@ -269,7 +269,20 @@ export default {
         return env.ASSETS.fetch(request);
     },
 
-    async scheduled(_controller: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
+    async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
+        // The "5 */3 * * *" cron is a retry that only runs if the primary ":00" sync failed.
+        // If the last sync succeeded within the past 10 minutes, skip.
+        const isRetryCron = controller.cron.startsWith("5 ");
+        if (isRetryCron) {
+            try {
+                type SyncState = { timestamp?: string; status?: string };
+                const stored = await env.SYNC_STATE.get("latest", { type: "json" }) as SyncState | null;
+                if (stored?.status === "success" && stored?.timestamp) {
+                    const ageMs = Date.now() - new Date(stored.timestamp).getTime();
+                    if (ageMs < 10 * 60 * 1000) return; // primary succeeded recently, skip retry
+                }
+            } catch { /* KV read failed — proceed with sync anyway */ }
+        }
         ctx.waitUntil(runSync(env).catch(console.error));
     },
 };
