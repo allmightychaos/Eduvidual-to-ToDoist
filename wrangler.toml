@@ -14,6 +14,8 @@ crons = ["0 */3 * * *", "5 */3 * * *"]
 binding = "SYNC_STATE"
 id = "cd25df842bb8423bbdc42da43a2fb1f9"
 
+# Custom domain route — replace or remove this if you are forking this project.
+# Set up your own domain in the Cloudflare dashboard and update the pattern below.
 [[routes]]
 pattern = "deadliner.skritt.net"
 custom_domain = true
